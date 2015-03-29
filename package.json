@@ -1,0 +1,11 @@
+{
+  "name": "pizzadealer.github.io",
+  "version": "0.0.1",
+  "description": "History of pizza.de deals",
+  "author": "Nico Lindemann <nico.lindemann@proux.de>",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^0.18.0",
+    "request": "^2.51.0"
+  }
+}
