@@ -6,6 +6,9 @@
   "license": "MIT",
   "dependencies": {
     "cheerio": "^0.18.0",
+    "cron": "^1.0.9",
+    "express": "^4.12.3",
+    "nodegit": "^0.3.3",
     "request": "^2.51.0"
   }
 }
