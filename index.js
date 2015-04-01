@@ -57,7 +57,7 @@
             fs.appendFile('data/' + da + '.csv', text, function (err) {
               if (err) throw err
 
-              exec('git config --global user.name "' + user + '"', function (error, stdout, stderr) {
+              exec('git config --global user.name "' + user + '" & git config --global user.email "pizzadealer@pizza"', function (error, stdout, stderr) {
                 console.log('stdout: ' + stdout)
                 console.log('stderr: ' + stderr)
                 if (error !== null) {
