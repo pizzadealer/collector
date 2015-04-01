@@ -57,58 +57,53 @@
             fs.appendFile('data/' + da + '.csv', text, function (err) {
               if (err) throw err
 
-              exec('git config --global user.name "' + user + '"',  function (error, stdout, stderr) {
-                  console.log('stdout: ' + stdout)
-                  console.log('stderr: ' + stderr)
-                  if (error !== null) {
+              exec('git config --global user.name "' + user + '"', function (error, stdout, stderr) {
+                console.log('stdout: ' + stdout)
+                console.log('stderr: ' + stderr)
+                if (error !== null) {
+                  index.addAll('.').then(function (result) {
+                    index.write()
+                    return index.writeTree()
+                  }).then(function (oidResult) {
+                    oid = oidResult
+                    return nodegit.Reference.nameToId(repo, 'HEAD')
+                  }).then(function (head) {
+                    return repo.getCommit(head)
+                  }).then(function (parent) {
+                    var author = nodegit.Signature.now('Pizzadealer', 'pizzadealer@pizza')
+                    var committer = nodegit.Signature.now('Pizzadealer', 'pizzadealer@pizza')
+                    return repo.createCommit('HEAD', author, committer, 'New Data', oid, [parent])
+                  }).then(function (commitId) {
+                    return console.log('New Commit: ', commitId)
+                  }).then(function () {
+                    return repo.getRemote('origin')
+                  }).then(function (remoteResult) {
+                    console.log('remote Loaded')
+                    remote = remoteResult
+                    remote.setCallbacks({
+                      credentials: function (url, userName) {
+                        return nodegit.Cred.userpassPlaintextNew(user, pass)
+                      }
+                    })
+                    console.log('remote Configured')
+                    return remote.connect(nodegit.Enums.DIRECTION.PUSH)
+                  }).then(function () {
+                    console.log('remote Connected?', remote.connected())
+                    return remote.push(
+                      ['refs/heads/master:refs/heads/master'],
+                      null,
+                      repo.defaultSignature(),
+                      'Push to master').then(function (number) {
+                      console.log(number)
+                    })
+                  }).then(function () {
+                    console.log('remote Pushed!')
+                  }).catch(function (reason) {
+                    console.log(reason)
+                  })
 
-
-
-
-
-              index.addAll('.').then(function (result) {
-                index.write()
-                return index.writeTree()
-              }).then(function (oidResult) {
-                oid = oidResult
-                return nodegit.Reference.nameToId(repo, 'HEAD')
-              }).then(function (head) {
-                return repo.getCommit(head)
-              }).then(function (parent) {
-                var author = nodegit.Signature.now('Pizzadealer', 'pizzadealer@pizza')
-                var committer = nodegit.Signature.now('Pizzadealer', 'pizzadealer@pizza')
-                return repo.createCommit('HEAD', author, committer, 'New Data', oid, [parent])
-              }).then(function (commitId) {
-                return console.log('New Commit: ', commitId)
-              }).then(function () {
-                return repo.getRemote('origin')
-              }).then(function (remoteResult) {
-                console.log('remote Loaded')
-                remote = remoteResult
-                remote.setCallbacks({
-                  credentials: function (url, userName) {
-                    return nodegit.Cred.userpassPlaintextNew(user, pass)
-                  }
-                })
-                console.log('remote Configured')
-                return remote.connect(nodegit.Enums.DIRECTION.PUSH)
-              }).then(function () {
-                console.log('remote Connected?', remote.connected())
-                return remote.push(
-                  ['refs/heads/master:refs/heads/master'],
-                  null,
-                  repo.defaultSignature(),
-                  'Push to master').then(function (number) {
-                  console.log(number)
-                })
-              }).then(function () {
-                console.log('remote Pushed!')
-              }).catch(function (reason) {
-                console.log(reason)
+                }
               })
-
-            }
-        })
 
             })
           })
