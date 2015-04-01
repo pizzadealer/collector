@@ -14,6 +14,14 @@
     oid,
     remote
 
+    exec('git config user.name "' + user + '"',  function (error, stdout, stderr) {
+    console.log('stdout: ' + stdout)
+    console.log('stderr: ' + stderr)
+    if (error !== null) {
+      console.log('exec error: ' + error)
+    }
+})
+
   app.set('port', (process.env.PORT || 5000))
   app.get('/', function (request, response) {
     response.send('PIZZA!')
