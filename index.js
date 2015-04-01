@@ -15,23 +15,6 @@
     oid,
     remote
 
-    exec('git init',  function (error, stdout, stderr) {
-        if (error !== null) {
-
-
-          exec('git config user.name "' + user + '"',  function (error, stdout, stderr) {
-              console.log('stdout: ' + stdout)
-              console.log('stderr: ' + stderr)
-              if (error !== null) {
-                console.log('exec error: ' + error)
-              }
-          })
-
-        }
-    })
-
-
-
   app.set('port', (process.env.PORT || 5000))
   app.get('/', function (request, response) {
     response.send('PIZZA!')
@@ -73,6 +56,16 @@
             text = timestamp + ',' + service.text().replace(/[^0-9]/g, '') + ',' + link.attr('href') + '\n'
             fs.appendFile('data/' + da + '.csv', text, function (err) {
               if (err) throw err
+
+              exec('git config --global user.name "' + user + '"',  function (error, stdout, stderr) {
+                  console.log('stdout: ' + stdout)
+                  console.log('stderr: ' + stderr)
+                  if (error !== null) {
+
+
+
+
+
               index.addAll('.').then(function (result) {
                 index.write()
                 return index.writeTree()
@@ -113,6 +106,10 @@
               }).catch(function (reason) {
                 console.log(reason)
               })
+
+            }
+        })
+
             })
           })
         })
