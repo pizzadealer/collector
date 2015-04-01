@@ -5,6 +5,7 @@
   var request = require('request')
   var cheerio = require('cheerio')
   var fs = require('fs')
+  var exec = require('exec')
   var express = require('express')
   var app = express()
   var clone = nodegit.Clone.clone
