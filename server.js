@@ -31,12 +31,12 @@ var performGathering = function (error, response, body) {
   var timestamp = new Date().getTime()
   var service, row, link, text
   var da = response.request.path.replace(/\//g, '')
-  console.log($('span.discount-value').length + ' deals found.')
-  $('span.discount-value').each(function () {
+  console.log($('div.discount__message').length + ' deals found.')
+  $('div.discount__message').each(function () {
     service = $(this)
-    row = service.parents('.srow')
-    link = $(row).children('.pdv').children('a')
-    text = timestamp + ',' + service.text().replace(/[^0-9]/g, '') + ',' + link.attr('href') + '\n'
+    row = service.parents('.restaurant-item')
+    link = $(row).children('a.restaurant-item__fullcoverlink')
+    text = timestamp + ',' + service.text().replace(/[^0-9]/g, '') + ',https://pizza.de' + link.attr('href') + '\n'
     fs.appendFile('data/' + da + '.csv', text, function (err) {
       if (err) throw err
 
