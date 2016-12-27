@@ -8,9 +8,9 @@ var exec = require('exec')
 var express = require('express')
 var app = express()
 var clone = nodegit.Clone.clone
+var deliveryareas
 var user = process.env.TOKEN
 var pass = 'x-oauth-basic'
-var deliveryareas = require('./data/deliveryareas.json')
 var repo
 var oid
 var remote
@@ -104,6 +104,7 @@ clone('https://' + encodeURIComponent(user) + ':' + encodeURIComponent(pass) + '
 }).then(function (indexResult) {
   index = indexResult
   console.log(index)
+  deliveryareas = require('./data/deliveryareas.json')
   var job = new CronJob('0 * * * *', function () {
     for (var i = 0; i < deliveryareas.length; i++) {
       request({
